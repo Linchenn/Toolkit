@@ -57,43 +57,7 @@ function createProgram(gl, vertexShaderSource, fragmentShaderSource) {
   }
 
   return program;
-};
-
-const gl = document.createElement("canvas").getContext("webgl2");
-gl.getExtension('EXT_color_buffer_float');
-const colorProgram = createProgram(gl, vs, colorFS);
-const width = 1;
-const height = 3672;
-// make 2 textures by attaching them to framebuffers and rendering to them
-const texFbPair1 = createTextureAndFramebuffer(gl, width, height);
-
-const buf = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-  -1, -1, 0, 0,
-   1, -1, 1, 0,
-  -1,  1, 0, 1,
-  -1,  1, 0, 1,
-   1, -1, 1, 0,
-   1,  1, 1, 1
-]), gl.STATIC_DRAW);
-  
-gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-const colorPrgPositionLoc = gl.getAttribLocation(colorProgram, "position");
-gl.enableVertexAttribArray(colorPrgPositionLoc);
-gl.vertexAttribPointer(colorPrgPositionLoc, 2, gl.FLOAT, false, 16, 0);
-gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-const colorPrgUvLoc = gl.getAttribLocation(colorProgram, "uv");
-gl.enableVertexAttribArray(colorPrgUvLoc);
-gl.vertexAttribPointer(colorPrgUvLoc, 2, gl.FLOAT, false, 16, 8);
-
-// draw red rect to first texture through the framebuffer it's attached to
-gl.useProgram(colorProgram);
-gl.bindFramebuffer(gl.FRAMEBUFFER, texFbPair1.fb);
-gl.viewport(0, 0, width, height);
-
-gl.drawArrays(gl.TRIANGLES, 0, 6);
-
+}
 
 function createTextureAndFramebuffer(gl, width, height) {
   const tex = gl.createTexture();
@@ -110,6 +74,43 @@ function createTextureAndFramebuffer(gl, width, height) {
   return {tex: tex, fb: fb};
 }
 
+const gl = document.createElement("canvas").getContext("webgl2");
+gl.getExtension('EXT_color_buffer_float');
+const colorProgram = createProgram(gl, vs, colorFS);
+const width = 1;
+const height = 3672;
+const texFbPair1 = createTextureAndFramebuffer(gl, width, height);
+
+const vertexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+  -1, 1, 0, 0, 1, -1, -1, 0, 0, 0, 1, 1, 0, 1, 1, 1, -1, 0, 1, 0
+]), gl.STATIC_DRAW);
+  
+gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+const colorPrgPositionLoc = gl.getAttribLocation(colorProgram, "position");
+gl.enableVertexAttribArray(colorPrgPositionLoc);
+gl.vertexAttribPointer(colorPrgPositionLoc, 3, gl.FLOAT, false, 20, 0);
+gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+const colorPrgUvLoc = gl.getAttribLocation(colorProgram, "uv");
+gl.enableVertexAttribArray(colorPrgUvLoc);
+gl.vertexAttribPointer(colorPrgUvLoc, 2, gl.FLOAT, false, 20, 12);
+
+const indexBuffer = gl.createBuffer();
+const triangleVertexIndices = new Uint16Array([0, 1, 2, 2, 1, 3]);
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, triangleVertexIndices, gl.STATIC_DRAW);
+
+// draw red rect to first texture through the framebuffer it's attached to
+gl.useProgram(colorProgram);
+gl.bindFramebuffer(gl.FRAMEBUFFER, texFbPair1.fb);
+gl.viewport(0, 0, width, height);
+
+gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+
+
+
 const fb = texFbPair1.fb
 gl.bindFramebuffer(gl.FRAMEBUFFER, fb)
 const packedRGBA = new Float32Array(width * height * 4);
@@ -117,8 +118,8 @@ gl.readPixels(
           0, 0, width, height, gl.RGBA, gl.FLOAT, packedRGBA);
 
 const ys = packedRGBA.filter((e, i) => i%4===1);
-// console.log(ys.join('\n'));
+console.log(ys.join('\n'));
 
-for (var i = 0; i < 10; i += 1) {
-  console.log(ys[i+1] + ":" + ys[i] + " Diff: " + 1/(ys[i+1] - ys[i]));
-}
+// for (var i = 0; i < 10; i += 1) {
+//   console.log(ys[i+1] + ":" + ys[i] + " Diff: " + 1/(ys[i+1] - ys[i]));
+// }
