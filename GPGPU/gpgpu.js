@@ -117,4 +117,8 @@ gl.readPixels(
           0, 0, width, height, gl.RGBA, gl.FLOAT, packedRGBA);
 
 const ys = packedRGBA.filter((e, i) => i%4===1);
-console.log(ys.join('\n'));
+// console.log(ys.join('\n'));
+
+for (var i = 0; i < 10; i += 1) {
+  console.log(ys[i+1] + ":" + ys[i] + " Diff: " + 1/(ys[i+1] - ys[i]));
+}
