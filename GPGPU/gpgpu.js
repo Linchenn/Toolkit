@@ -18,9 +18,10 @@ precision highp float;
 
 in vec2 v_texcoord;
 out vec4 fragColor;
+uniform float color;
 
 void main() {
-    fragColor = vec4(v_texcoord, 0, 0);
+    fragColor = vec4(color, 1.0/color, 0, 0);
 }
 `;
 
@@ -91,6 +92,9 @@ gl.vertexAttribPointer(colorPrgUvLoc, 2, gl.FLOAT, false, 16, 8);
 gl.useProgram(colorProgram);
 gl.bindFramebuffer(gl.FRAMEBUFFER, texFbPair1.fb);
 gl.viewport(0, 0, width, height);
+
+const colorLoc = gl.getUniformLocation(colorProgram, "color");
+gl.uniform1f(colorLoc, 3672);
 
 gl.drawArrays(gl.TRIANGLES, 0, 6);
 
