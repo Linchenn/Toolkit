@@ -6,10 +6,12 @@ precision highp float;
 in vec3 position;
 in highp vec2 uv;
 out vec2 v_texcoord;
+out vec2 coords;
 
 void main() {
   gl_Position = vec4(position, 1);
   v_texcoord = uv;
+  coords = vec2(uv.y * 3672.0, uv.x * 1.0);
 }
 `;
 
@@ -17,10 +19,11 @@ var colorFS = `#version 300 es
 precision highp float;
 
 in vec2 v_texcoord;
+in vec2 coords;
 out vec4 fragColor;
 
 void main() {
-    fragColor = vec4(v_texcoord, 0, 0);
+    fragColor = vec4(coords, 0, 0);
 }
 `;
 
@@ -117,8 +120,10 @@ const packedRGBA = new Float32Array(width * height * 4);
 gl.readPixels(
           0, 0, width, height, gl.RGBA, gl.FLOAT, packedRGBA);
 
-const ys = packedRGBA.filter((e, i) => i%4===1);
-console.log(ys.join('\n'));
+const ys = packedRGBA.filter((e, i) => i%4===0);
+const iys = ys.map(e=> Math.floor(e));
+console.log(iys.join('\n'));
+// console.log(ys.join('\n'));
 
 // for (var i = 0; i < 10; i += 1) {
 //   console.log(ys[i+1] + ":" + ys[i] + " Diff: " + 1/(ys[i+1] - ys[i]));
