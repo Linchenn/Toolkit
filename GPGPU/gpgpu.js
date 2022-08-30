@@ -84,7 +84,10 @@ const texFbPair1 = createTextureAndFramebuffer(gl, width, height);
 const vertexBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-  -1, 1, 0, 0, 1, -1, -1, 0, 0, 0, 1, 1, 0, 1, 1, 1, -1, 0, 1, 0
+  -1,  1, 0, 0, 1,
+  -1, -1, 0, 0, 0,
+   1,  1, 0, 1, 1,
+   1, -1, 0, 1, 0
 ]), gl.STATIC_DRAW);
   
 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
