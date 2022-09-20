@@ -2,25 +2,113 @@
 
 var vs = `#version 300 es
 precision highp float;
-
-in vec3 position;
-in highp vec2 uv;
-out vec2 v_texcoord;
+in vec3 clipSpacePos;
+in vec2 uv;
+out vec2 resultUV;
 
 void main() {
-  gl_Position = vec4(position, 1);
-  v_texcoord = uv;
+  gl_Position = vec4(clipSpacePos, 1);
+  resultUV = uv;
 }
 `;
 
 var colorFS = `#version 300 es
-precision highp float;
 
-in vec2 v_texcoord;
-out vec4 fragColor;
+precision highp float;
+precision highp int;
+precision highp sampler2D;
+in vec2 resultUV;
+out vec4 outputColor;
+const vec2 halfCR = vec2(0.5, 0.5);
+uniform sampler2D x;
+
+int imod(int x, int y) {
+    return x - y * (x / y);
+}
+
+int idiv(int a, int b, float sign) {
+    int res = a / b;
+    int mod = imod(a, b);
+    if (sign < 0. && mod != 0) {
+    res -= 1;
+    }
+    return res;
+}
+
+vec2 uvFromFlat(int texNumR, int texNumC, int index) {
+    int texR = index / texNumC;
+    int texC = index - texR * texNumC;
+    return (vec2(texC, texR) + halfCR) / vec2(texNumC, texNumR);
+}
+vec2 packedUVfrom1D(int texNumR, int texNumC, int index) {
+    int texelIndex = index / 2;
+    int texR = texelIndex / texNumC;
+    int texC = texelIndex - texR * texNumC;
+    return (vec2(texC, texR) + halfCR) / vec2(texNumC, texNumR);
+}
+
+vec2 packedUVfrom2D(int texelsInLogicalRow, int texNumR,
+    int texNumC, int row, int col) {
+    int texelIndex = (row / 2) * texelsInLogicalRow + (col / 2);
+    int texR = texelIndex / texNumC;
+    int texC = texelIndex - texR * texNumC;
+    return (vec2(texC, texR) + halfCR) / vec2(texNumC, texNumR);
+}
+
+vec2 packedUVfrom3D(int texNumR, int texNumC,
+int texelsInBatch, int texelsInLogicalRow, int b,
+int row, int col) {
+int index = b * texelsInBatch + (row / 2) * texelsInLogicalRow + (col / 2);
+int texR = index / texNumC;
+int texC = index - texR * texNumC;
+return (vec2(texC, texR) + halfCR) / vec2(texNumC, texNumR);
+}
+
+float sampleTexture(sampler2D textureSampler, vec2 uv) {
+    return texture(textureSampler, uv).r;
+}
+
+void setOutput(float val) {
+    outputColor = vec4(val, 0, 0, 0);
+}
+
+ivec4 getOutputCoords() {
+    ivec2 resTexRC = ivec2(resultUV.yx *
+    vec2(144, 256));
+    int index = resTexRC.x * 256 + resTexRC.y;
+    int r = index / 36864; index -= r * 36864;int c = index / 3072; index -= c * 3072;int d = index / 256; int d2 = index - d * 256;
+    return ivec4(r, c, d, d2);
+}
+    
+float getX(int row, int col, int depth) {
+    float texR = dot(vec2(row, col), vec2(12, 1));
+    float texC = float(depth);
+    vec2 uv = (vec2(texC, texR) + halfCR) / vec2(256.0, 144.0);
+    return sampleTexture(x, uv);
+}
+
+float getX(int row, int col, int depth, int depth2) {
+    return getX(col, depth, depth2);
+}
 
 void main() {
-    fragColor = vec4(v_texcoord, 0, 0);
+    ivec4 coords = getOutputCoords();
+    int batch = coords[0];
+    int xRCorner = coords[1];
+    int xCCorner = coords[2];
+    float result = 0.0;
+
+    int flatIndexStart = (xRCorner * 12 + xCCorner) * 256;
+    for (int ch = 0; ch < 256; ch += 1) {
+        int index = flatIndexStart + ch;
+        int texR = index / 256;
+        int texC = index - texR * 256;
+        vec2 uv = (vec2(texC, texR) + halfCR) / vec2(256, 144);
+        result += uv.x + uv.y;
+        // result += texture(x, uv).r;
+    }
+    setOutput(result);
+    // setOutput(texture(x, vec2(0.5, 0.5)).r);
 }
 `;
 
@@ -77,8 +165,8 @@ function createTextureAndFramebuffer(gl, width, height) {
 const gl = document.createElement("canvas").getContext("webgl2");
 gl.getExtension('EXT_color_buffer_float');
 const colorProgram = createProgram(gl, vs, colorFS);
-const width = 1;
-const height = 3672;
+const width = 256;
+const height = 144;
 const texFbPair1 = createTextureAndFramebuffer(gl, width, height);
 
 const vertexBuffer = gl.createBuffer();
@@ -91,13 +179,26 @@ gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
 ]), gl.STATIC_DRAW);
   
 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-const colorPrgPositionLoc = gl.getAttribLocation(colorProgram, "position");
+const colorPrgPositionLoc = gl.getAttribLocation(colorProgram, "clipSpacePos");
 gl.enableVertexAttribArray(colorPrgPositionLoc);
 gl.vertexAttribPointer(colorPrgPositionLoc, 3, gl.FLOAT, false, 20, 0);
 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
 const colorPrgUvLoc = gl.getAttribLocation(colorProgram, "uv");
 gl.enableVertexAttribArray(colorPrgUvLoc);
 gl.vertexAttribPointer(colorPrgUvLoc, 2, gl.FLOAT, false, 20, 12);
+
+
+// // Upload texture.
+// var textureLocation = gl.getUniformLocation(colorProgram, "x");
+// var texture = gl.createTexture();
+// gl.activeTexture(gl.TEXTURE0)
+// gl.bindTexture(gl.TEXTURE_2D, texture);
+// const dataForUpload = new Float32Array(width * height * 4).fill(1.0);
+// // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, dataForUpload);
+// gl.texSubImage2D(
+//   gl.TEXTURE_2D, 0, 0, 0, width, height, gl.RGBA, gl.FLOAT,
+//   dataForUpload)
+// gl.bindTexture(gl.TEXTURE_2D, null);
 
 const indexBuffer = gl.createBuffer();
 const triangleVertexIndices = new Uint16Array([0, 1, 2, 2, 1, 3]);
@@ -108,6 +209,9 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, triangleVertexIndices, gl.STATIC_DRAW);
 gl.useProgram(colorProgram);
 gl.bindFramebuffer(gl.FRAMEBUFFER, texFbPair1.fb);
 gl.viewport(0, 0, width, height);
+
+// Tell the shader to use texture unit 0 for u_texture
+// gl.uniform1i(textureLocation, 0);
 
 gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
@@ -120,9 +224,5 @@ const packedRGBA = new Float32Array(width * height * 4);
 gl.readPixels(
           0, 0, width, height, gl.RGBA, gl.FLOAT, packedRGBA);
 
-const ys = packedRGBA.filter((e, i) => i%4===1);
+const ys = packedRGBA.filter((e, i) => i%4===0).slice(0, 5);
 console.log(ys.join('\n'));
-
-// for (var i = 0; i < 10; i += 1) {
-//   console.log(ys[i+1] + ":" + ys[i] + " Diff: " + 1/(ys[i+1] - ys[i]));
-// }
