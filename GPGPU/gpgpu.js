@@ -109,7 +109,6 @@ gl.getExtension('EXT_color_buffer_float');
 const colorProgram = createProgram(gl, vs, colorFS);
 const width = 256;
 const height = 144;
-const texFbPair1 = createTextureAndFramebuffer(gl, width, height);
 
 const vertexBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -151,23 +150,40 @@ const triangleVertexIndices = new Uint16Array([0, 1, 2, 2, 1, 3]);
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, triangleVertexIndices, gl.STATIC_DRAW);
 
-// draw red rect to first texture through the framebuffer it's attached to
-gl.useProgram(colorProgram);
+const texFbPair1 = createTextureAndFramebuffer(gl, width, height);
 gl.bindFramebuffer(gl.FRAMEBUFFER, texFbPair1.fb);
-gl.viewport(0, 0, width, height);
 
-// Tell the shader to use texture unit 0 for u_texture
-gl.uniform1i(textureLocation, 0);
 
-gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
-gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+function runProgram() {
+  // draw red rect to first texture through the framebuffer it's attached to
+  gl.useProgram(colorProgram);
+  gl.viewport(0, 0, width, height);
+  
+  // Tell the shader to use texture unit 0 for u_texture
+  gl.uniform1i(textureLocation, 0);
+  
+  gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+  const fb = texFbPair1.fb
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fb)
+  const packedRGBA = new Float32Array(width * height * 4);
+  gl.readPixels(
+            0, 0, width, height, gl.RGBA, gl.FLOAT, packedRGBA);
+  return packedRGBA;
+}
+let result = runProgram();
 
+var start = Date.now();
+var epoch = 100;
+// you can set epoch = 1 and log = true to verify output values.
+var log = false;
+for (let i = 0; i < epoch; i++) {
+  runProgram();
+}
+var end = Date.now();
+console.log('program', (end - start) / epoch);
+
+result = runProgram();
 
 // Print the result.
-const fb = texFbPair1.fb
-gl.bindFramebuffer(gl.FRAMEBUFFER, fb)
-const packedRGBA = new Float32Array(width * height * 4);
-gl.readPixels(
-          0, 0, width, height, gl.RGBA, gl.FLOAT, packedRGBA);
-const ys = packedRGBA.filter((e, i) => i%4===0).slice(0, 5);
+const ys = result.filter((e, i) => i%4===0).slice(0, 5);
 console.log(ys.join('\n'));
