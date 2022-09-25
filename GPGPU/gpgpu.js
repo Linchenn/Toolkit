@@ -1,5 +1,17 @@
 "use strict";
 
+// Parameters
+const numLoops = 512;
+const width = 4096;
+const height = 1;
+const epoch = 100;
+
+let mainCode = '';
+for (let i = 0; i < numLoops; i++) {
+  mainCode += 'uv.x = texture(x, uv).r;\n'
+  // mainCode += 'uv.x += uv.y;\n'
+}
+
 var vs = `#version 300 es
 precision highp float;
 in vec3 clipSpacePos;
@@ -25,31 +37,11 @@ void setOutput(float val) {
     outputColor = vec4(val, 0, 0, 0);
 }
 
-ivec4 getOutputCoords() {
-    ivec2 resTexRC = ivec2(resultUV.yx *
-    vec2(144, 256));
-    int index = resTexRC.x * 256 + resTexRC.y;
-    int r = index / 36864; index -= r * 36864;int c = index / 3072; index -= c * 3072;int d = index / 256; int d2 = index - d * 256;
-    return ivec4(r, c, d, d2);
-}
-
 void main() {
-    ivec4 coords = getOutputCoords();
-    int batch = coords[0];
-    int xRCorner = coords[1];
-    int xCCorner = coords[2];
-    float result = 0.0;
-
-    int flatIndexStart = (xRCorner * 12 + xCCorner) * 256;
-    for (int ch = 0; ch < 256; ch += 1) {
-        int index = flatIndexStart + ch;
-        int texR = index / 256;
-        int texC = index - texR * 256;
-        vec2 uv = (vec2(texC, texR) + halfCR) / vec2(256, 144);
-        // result += uv.x + uv.y;
-        result += texture(x, uv).r;
-    }
-    setOutput(result);
+  vec2 uv = resultUV;
+  float result = 1.0;
+  ${mainCode}
+  setOutput(uv.x);
 }
 `;
 
@@ -107,8 +99,6 @@ function createTextureAndFramebuffer(gl, width, height) {
 const gl = document.createElement("canvas").getContext("webgl2");
 gl.getExtension('EXT_color_buffer_float');
 const colorProgram = createProgram(gl, vs, colorFS);
-const width = 256;
-const height = 144;
 
 const vertexBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -129,7 +119,6 @@ const colorPrgUvLoc = gl.getAttribLocation(colorProgram, "uv");
 gl.enableVertexAttribArray(colorPrgUvLoc);
 gl.vertexAttribPointer(colorPrgUvLoc, 2, gl.FLOAT, false, 20, 12);
 
-
 // Upload texture.
 var texture = gl.createTexture();
 gl.activeTexture(gl.TEXTURE0);
@@ -140,7 +129,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 const data = [];
 for (let number = 0; number < width * height; number++) {
-  data.push(number, 0, 0, 0);
+  data.push(number / width / height, 0, 0, 0);
 }
 const dataForUpload = new Float32Array(data);
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, width, height, 0, gl.RGBA, gl.FLOAT, dataForUpload);
@@ -173,7 +162,6 @@ function runProgram() {
 let result = runProgram();
 
 var start = Date.now();
-var epoch = 100;
 // you can set epoch = 1 and log = true to verify output values.
 var log = false;
 for (let i = 0; i < epoch; i++) {
@@ -181,8 +169,6 @@ for (let i = 0; i < epoch; i++) {
 }
 var end = Date.now();
 console.log('program', (end - start) / epoch);
-
-result = runProgram();
 
 // Print the result.
 const ys = result.filter((e, i) => i%4===0).slice(0, 5);
