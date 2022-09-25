@@ -142,7 +142,6 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, triangleVertexIndices, gl.STATIC_DRAW);
 const texFbPair1 = createTextureAndFramebuffer(gl, width, height);
 gl.bindFramebuffer(gl.FRAMEBUFFER, texFbPair1.fb);
 
-
 function runProgram() {
   // draw red rect to first texture through the framebuffer it's attached to
   gl.useProgram(colorProgram);
@@ -162,10 +161,8 @@ function runProgram() {
 let result = runProgram();
 
 var start = Date.now();
-// you can set epoch = 1 and log = true to verify output values.
-var log = false;
 for (let i = 0; i < epoch; i++) {
-  runProgram();
+  result = runProgram();
 }
 var end = Date.now();
 console.log('program', (end - start) / epoch);
