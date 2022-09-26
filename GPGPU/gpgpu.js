@@ -29,6 +29,16 @@ void setOutput(float val) {
     outputColor = vec4(val, 0, 0, 0);
 }
 
+//Based on the work of Dave Hoskins
+//https://www.shadertoy.com/view/4djSRW
+#define HASHSCALE1 443.8975
+float random(float seed){
+    vec2 p = resultUV * seed;
+    vec3 p3  = fract(vec3(p.xyx) * HASHSCALE1);
+    p3 += dot(p3, p3.yzx + 19.19);
+    return fract((p3.x + p3.y) * p3.z);
+}
+
 ivec4 getOutputCoords() {
     ivec2 resTexRC = ivec2(resultUV.yx * vec2(${height}, ${width}));
     int index = resTexRC.x * ${width} + resTexRC.y;
@@ -45,12 +55,17 @@ void main() {
 
     int flatIndexStart = (xRCorner * 12 + xCCorner) * ${width};
     for (int ch = 0; ch < ${width}; ch += 1) {
-        int index = flatIndexStart + ch;
-        int texR = index / ${width};
-        int texC = index - texR * ${width};
-        vec2 uv = (vec2(texC, texR) + halfCR) / vec2(${width}, ${height});
-        // result += uv.x + uv.y;
-        result += texture(x, uv).r;
+      int index = flatIndexStart + ch;
+
+      int texR = index / ${width};
+      int texC = index - texR * ${width};
+      vec2 uv = (vec2(texC, texR) + halfCR) / vec2(${width}, ${height});
+      result += texture(x, uv).r;
+
+      // result += random(float(index)) + random(float(ch));
+
+      // vec2 uv = vec2(random(float(index)), random(float(ch)));
+      // result += texture(x, uv).r;
     }
     setOutput(result);
 }
