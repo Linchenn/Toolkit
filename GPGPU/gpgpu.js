@@ -56,11 +56,12 @@ void main() {
     int flatIndexStart = (xRCorner * 12 + xCCorner) * ${width};
     for (int ch = 0; ch < ${width}; ch += 1) {
       int index = flatIndexStart + ch;
-
+      
       int texR = index / ${width};
       int texC = index - texR * ${width};
       vec2 uv = (vec2(texC, texR) + halfCR) / vec2(${width}, ${height});
-      result += texture(x, uv).r;
+      result += uv.x + uv.y;
+      // result += texture(x, uv).r;
 
       // result += random(float(index)) + random(float(ch));
 
