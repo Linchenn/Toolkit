@@ -1,15 +1,28 @@
 "use strict";
 
 // Parameters
-const numLoops = 512;
-const width = 4096;
-const height = 1;
+const numLoops = 256;
+const width = 256;
+const height = 144;
 const epoch = 100;
+const ins = 'read';
 
+// Build main code for fs
 let mainCode = '';
+
 for (let i = 0; i < numLoops; i++) {
-  mainCode += 'uv.x = texture(x, uv).r;\n'
-  // mainCode += 'uv.x += uv.y;\n'
+  if (ins === 'read') {
+    mainCode += `
+    result += texture(x, vec2(random(${i}.0), random(${numLoops - i}.0))).r;`
+  } else if (ins ==='getRandom') {
+    mainCode += `
+    result += random(${i}.0) + random(${numLoops - i}.0);`
+  } else if (ins === 'mult') {
+    mainCode += `
+    result *= resultUV.x;`
+  } else if (ins === 'none') {
+    mainCode = '';
+  }
 }
 
 var vs = `#version 300 es
@@ -37,11 +50,21 @@ void setOutput(float val) {
     outputColor = vec4(val, 0, 0, 0);
 }
 
+//Based on the work of Dave Hoskins
+//https://www.shadertoy.com/view/4djSRW
+#define HASHSCALE1 443.8975
+float random(float seed){
+    vec2 p = resultUV * seed;
+    vec3 p3  = fract(vec3(p.xyx) * HASHSCALE1);
+    p3 += dot(p3, p3.yzx + 19.19);
+    return fract((p3.x + p3.y) * p3.z);
+}
+
 void main() {
   vec2 uv = resultUV;
   float result = 1.0;
   ${mainCode}
-  setOutput(uv.x);
+  setOutput(result);
 }
 `;
 
@@ -129,7 +152,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 const data = [];
 for (let number = 0; number < width * height; number++) {
-  data.push(number / width / height, 0, 0, 0);
+  data.push(1, 0, 0, 0);
 }
 const dataForUpload = new Float32Array(data);
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, width, height, 0, gl.RGBA, gl.FLOAT, dataForUpload);
