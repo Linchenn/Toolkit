@@ -19,7 +19,7 @@ for (let i = 0; i < numLoops; i++) {
     result += random(${i}.0) + random(${numLoops - i}.0);`
   } else if (ins === 'mult') {
     mainCode += `
-    result *= resultUV.x;`
+    result *= (resultUV.x + 1.0);`
   } else if (ins === 'none') {
     mainCode = '';
   }
@@ -152,7 +152,7 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 const data = [];
 for (let number = 0; number < width * height; number++) {
-  data.push(1, 0, 0, 0);
+  data.push(number, 0, 0, 0);
 }
 const dataForUpload = new Float32Array(data);
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, width, height, 0, gl.RGBA, gl.FLOAT, dataForUpload);
