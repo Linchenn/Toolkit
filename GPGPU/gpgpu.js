@@ -1,6 +1,10 @@
 "use strict";
 
-var vs = `#version 300 es
+const width = 256;
+const height = 144;
+const epoch = 100;
+
+const vs = `#version 300 es
 precision highp float;
 in vec3 clipSpacePos;
 in vec2 uv;
@@ -12,7 +16,7 @@ void main() {
 }
 `;
 
-var colorFS = `#version 300 es
+const colorFS = `#version 300 es
 precision highp float;
 precision highp int;
 precision highp sampler2D;
@@ -26,10 +30,9 @@ void setOutput(float val) {
 }
 
 ivec4 getOutputCoords() {
-    ivec2 resTexRC = ivec2(resultUV.yx *
-    vec2(144, 256));
-    int index = resTexRC.x * 256 + resTexRC.y;
-    int r = index / 36864; index -= r * 36864;int c = index / 3072; index -= c * 3072;int d = index / 256; int d2 = index - d * 256;
+    ivec2 resTexRC = ivec2(resultUV.yx * vec2(${height}, ${width}));
+    int index = resTexRC.x * ${width} + resTexRC.y;
+    int r = index / ${width * height}; index -= r * ${width * height};int c = index / ${12 * width}; index -= c * ${12 * width};int d = index / ${width}; int d2 = index - d * ${width};
     return ivec4(r, c, d, d2);
 }
 
@@ -40,12 +43,12 @@ void main() {
     int xCCorner = coords[2];
     float result = 0.0;
 
-    int flatIndexStart = (xRCorner * 12 + xCCorner) * 256;
-    for (int ch = 0; ch < 256; ch += 1) {
+    int flatIndexStart = (xRCorner * 12 + xCCorner) * ${width};
+    for (int ch = 0; ch < ${width}; ch += 1) {
         int index = flatIndexStart + ch;
-        int texR = index / 256;
-        int texC = index - texR * 256;
-        vec2 uv = (vec2(texC, texR) + halfCR) / vec2(256, 144);
+        int texR = index / ${width};
+        int texC = index - texR * ${width};
+        vec2 uv = (vec2(texC, texR) + halfCR) / vec2(${width}, ${height});
         // result += uv.x + uv.y;
         result += texture(x, uv).r;
     }
@@ -107,8 +110,6 @@ function createTextureAndFramebuffer(gl, width, height) {
 const gl = document.createElement("canvas").getContext("webgl2");
 gl.getExtension('EXT_color_buffer_float');
 const colorProgram = createProgram(gl, vs, colorFS);
-const width = 256;
-const height = 144;
 
 const vertexBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -171,13 +172,12 @@ function runProgram() {
   return packedRGBA;
 }
 let result = runProgram();
+let t = 0;
 
 var start = Date.now();
-var epoch = 100;
-// you can set epoch = 1 and log = true to verify output values.
-var log = false;
 for (let i = 0; i < epoch; i++) {
-  runProgram();
+  result = runProgram();
+  t += result[0];
 }
 var end = Date.now();
 console.log('program', (end - start) / epoch);
@@ -187,3 +187,4 @@ result = runProgram();
 // Print the result.
 const ys = result.filter((e, i) => i%4===0).slice(0, 5);
 console.log(ys.join('\n'));
+console.log('t: ', t);
