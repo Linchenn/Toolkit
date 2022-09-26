@@ -20,6 +20,9 @@ for (let i = 0; i < numLoops; i++) {
   } else if (ins === 'mult') {
     mainCode += `
     result *= (resultUV.x + 1.0);`
+  } else if (ins === 'divide') {
+    mainCode += `
+    result /= (1.0 - resultUV.x * 0.01);`
   } else if (ins === 'none') {
     mainCode = '';
   }
