@@ -1,5 +1,5 @@
 async function loadModelP() {
-    const model = await tf.loadGraphModel("http://cardiologists.london/static/atria/models/atria/046.yaml__last.ckpt__logit__fp32.onnx-tfjs-uint8/model.json");
+    const model = await tf.loadGraphModel("http://cardiologists.london/static/atria/models/atria/050.yaml__last.ckpt__logit__fp32.onnx-tfjs-uint8/model.json");
     // const model = await tf.loadGraphModel("./models/atria/047.yaml__last.ckpt__logit__fp32.onnx-tfjs-uint8/model.json");
     // const model = await tf.loadGraphModel("./models/atria/048.yaml__last.ckpt__logit__fp32.onnx-tfjs-uint8/model.json");
     return model;
@@ -53,13 +53,13 @@ async function inferenceOnImagesP() {
     var canvas = document.getElementById('canvas0');
     await tf.browser.toPixels(scaledPredTensor, canvas);
 
-    // repeat single image
-    inputTensor = await loadImageP("./1.png")
-    var [outputTensor, inferenceTime] = await inferenceOnTensorP(model, inputTensor);
-    console.log(inputTensor.shape, " -> ", outputTensor.shape, "(" + inferenceTime + "s)")
-    scaledPredTensor = tf.div(predTensor, 2)
-    canvas = document.getElementById('canvas1');
-    await tf.browser.toPixels(scaledPredTensor, canvas);
+    // // repeat single image
+    // inputTensor = await loadImageP("./1.png")
+    // var [outputTensor, inferenceTime] = await inferenceOnTensorP(model, inputTensor);
+    // console.log(inputTensor.shape, " -> ", outputTensor.shape, "(" + inferenceTime + "s)")
+    // scaledPredTensor = tf.div(predTensor, 2)
+    // canvas = document.getElementById('canvas1');
+    // await tf.browser.toPixels(scaledPredTensor, canvas);
 }
 
 let pf;
