@@ -1,5 +1,5 @@
 async function loadModelP() {
-    const model = await tf.loadGraphModel("http://cardiologists.london/static/atria/models/atria/050.yaml__last.ckpt__logit__fp32.onnx-tfjs-uint8/model.json");
+    const model = await tf.loadGraphModel("http://cardiologists.london/static/atria/models/atria/046.yaml__last.ckpt__logit__fp32.onnx-tfjs-uint8/model.json");
     // const model = await tf.loadGraphModel("./models/atria/047.yaml__last.ckpt__logit__fp32.onnx-tfjs-uint8/model.json");
     // const model = await tf.loadGraphModel("./models/atria/048.yaml__last.ckpt__logit__fp32.onnx-tfjs-uint8/model.json");
     return model;
@@ -22,7 +22,8 @@ async function loadImageP(path) {
 
 async function inferenceOnTensorP(model, inputTensor) {
     const start = new Date();
-    const outputTensor = model.predict(inputTensor)
+    const outputTensor = model.predict(inputTensor);
+    outputTensor.dataSync();
     const end = new Date();
     const inferenceTime = (end.getTime() - start.getTime()) / 1000;
     return [outputTensor, inferenceTime];
@@ -39,9 +40,21 @@ async function inferenceOnImageP() {
 
 async function inferenceOnImagesP() {
     const model = await loadModelP();
-
     inputTensor = await loadImageP("./0.png");
+
+    // Parallel compile
+    tf.env().set('ENGINE_COMPILE_ONLY', true);
+    const start = new Date();
+    model.predict(inputTensor).dataSync();
+    tf.backend().checkCompileCompletion();
+    tf.backend().getUniformLocations();
+    tf.env().set('ENGINE_COMPILE_ONLY', false);
+
     var [outputTensor, inferenceTime] = await inferenceOnTensorP(model, inputTensor);
+
+    const end = new Date();
+    const warmUpMs = (end.getTime() - start.getTime()) / 1000;
+    console.log('Warm up time:', warmUpMs, Object.keys(tf.backend().binaryCache).length);
     // the network outputs a 1 x 3 x 320 x 320 array (1 image, 3 classes (background, LA, RA) * 320 * 320 pixels)
     // we take an argmax of the 1`th dimension -> 1 * 320 * 320 (where value 0 = background most likely class, 1 LA, 2 RA)
     // we then 'squeeze' it to remove the redunant 0`th dimension, to yield a 320 x 320 array
@@ -53,13 +66,13 @@ async function inferenceOnImagesP() {
     var canvas = document.getElementById('canvas0');
     await tf.browser.toPixels(scaledPredTensor, canvas);
 
-    // // repeat single image
-    // inputTensor = await loadImageP("./1.png")
-    // var [outputTensor, inferenceTime] = await inferenceOnTensorP(model, inputTensor);
-    // console.log(inputTensor.shape, " -> ", outputTensor.shape, "(" + inferenceTime + "s)")
-    // scaledPredTensor = tf.div(predTensor, 2)
-    // canvas = document.getElementById('canvas1');
-    // await tf.browser.toPixels(scaledPredTensor, canvas);
+    // repeat single image
+    inputTensor = await loadImageP("./1.png")
+    var [outputTensor, inferenceTime] = await inferenceOnTensorP(model, inputTensor);
+    console.log(inputTensor.shape, " -> ", outputTensor.shape, "(" + inferenceTime + "s)")
+    scaledPredTensor = tf.div(predTensor, 2)
+    canvas = document.getElementById('canvas1');
+    await tf.browser.toPixels(scaledPredTensor, canvas);
 }
 
 let pf;
