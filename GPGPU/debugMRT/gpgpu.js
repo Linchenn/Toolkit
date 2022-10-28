@@ -207,13 +207,9 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, width, height, 0, gl.RGBA, gl.FLOAT, null);
-// const fb2 = gl.createFramebuffer();
-gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+const fb2 = gl.createFramebuffer();
+gl.bindFramebuffer(gl.FRAMEBUFFER, fb2);
 gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, output2, 0);
-// gl.framebufferTextureLayer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, output2, 0, 0);
-gl.framebufferTextureLayer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT1, null, 0, 1);
-gl.framebufferTextureLayer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT2, null, 0, 2);
-gl.framebufferTextureLayer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT3, null, 0, 3);
 
     gl.drawBuffers([
       gl.COLOR_ATTACHMENT0
@@ -228,7 +224,7 @@ function runProgram2() {
   gl.uniform1i(textureLocation2, 2);
   
   gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
-  gl.bindFramebuffer(gl.FRAMEBUFFER, fb)
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fb2)
   const packedRGBA = new Float32Array(width * height * 4);
   gl.readPixels(
             0, 0, width, height, gl.RGBA, gl.FLOAT, packedRGBA);

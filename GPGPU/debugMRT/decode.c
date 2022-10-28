@@ -147,19 +147,19 @@ out vec4 outputColor;
     }
   
 
-    ivec3 getOutputCoords() {
-      ivec2 resTexRC = ivec2(resultUV.yx *
-                             vec2(32, 32));
-      int index = resTexRC.x * 32 + resTexRC.y;
+  ivec3 getOutputCoords() {
+    ivec2 resTexRC = ivec2(resultUV.yx *
+                            vec2(32, 32));
+    int index = resTexRC.x * 32 + resTexRC.y;
 
-      int b = index / 1024;
-      index -= b * 1024;
+    int b = index / 1024;
+    index -= b * 1024;
 
-      int r = 2 * (index / 8);
-      int c = imod(index, 8) * 2;
+    int r = 2 * (index / 8);
+    int c = imod(index, 8) * 2;
 
-      return ivec3(b, r, c);
-    }
+    return ivec3(b, r, c);
+  }
   
 
       
@@ -168,27 +168,27 @@ out vec4 outputColor;
     return texelFetch(A, coords, 0);
   }
 
-      vec4 getA(int b, int row, int col) {
-        return getA(row, col);
-      }
+  vec4 getA(int b, int row, int col) {
+    return getA(row, col);
+  }
     
 
-      ivec3 outCoordsFromFlatIndex(int index) {
-        int r = index / 4096; index -= r * 4096;int c = index / 16; int d = index - c * 16;
-        return ivec3(r, c, d);
-      }
+  ivec3 outCoordsFromFlatIndex(int index) {
+    int r = index / 4096; index -= r * 4096;int c = index / 16; int d = index - c * 16;
+    return ivec3(r, c, d);
+  }
 
-      void main() {
-        ivec2 resTexRC = ivec2(resultUV.yx * vec2(texShape[0], texShape[1]));
-        int index = 4 * (resTexRC.x * texShape[1] + resTexRC.y);
+  void main() {
+    ivec2 resTexRC = ivec2(resultUV.yx * vec2(texShape[0], texShape[1]));
+    int index = 4 * (resTexRC.x * texShape[1] + resTexRC.y);
 
-        vec4 result = vec4(0.);
+    vec4 result = vec4(0.);
 
-        for (int i=0; i<4; i++) {
-          int flatIndex = index + i;
-          ivec3 rc = outCoordsFromFlatIndex(flatIndex);
-          result[i] = getChannel(getA(rc.x, rc.y, rc.z), vec2(rc.y, rc.z));
-        }
+    for (int i=0; i<4; i++) {
+      int flatIndex = index + i;
+      ivec3 rc = outCoordsFromFlatIndex(flatIndex);
+      result[i] = getChannel(getA(rc.x, rc.y, rc.z), vec2(rc.y, rc.z));
+    }
 
-        outputColor = result;
-      }
+    outputColor = result;
+  }
