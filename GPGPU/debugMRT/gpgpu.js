@@ -1,7 +1,7 @@
 "use strict";
 
 const width = 16;
-const height = 16;
+const height = 256;
 const epoch = 100;
 
 const vs = `#version 300 es
@@ -42,11 +42,88 @@ precision highp float;
 precision highp int;
 precision highp sampler2D;
 in vec2 resultUV;
+
+
+int imod(int x, int y) {
+  return x - y * (x / y);
+}
+
+ivec3 packedCoordsfrom2D(int texelsInLogicalRow, int texNumR,
+int texNumC, int row, int col) {
+int texelIndexInTex = (row / 4) * texelsInLogicalRow + (col / 4);
+int x = texelIndexInTex / texNumC;
+int y = texelIndexInTex - x * texNumC;
+int z = (row & 2) + (col & 2) / 2;
+return ivec3(x, y, z);
+}
+
+float getChannel(vec4 frag, vec2 innerDims) {
+vec2 modCoord = mod(innerDims, 2.);
+return modCoord.x == 0. ?
+  (modCoord.y == 0. ? frag.r : frag.g) :
+  (modCoord.y == 0. ? frag.b : frag.a);
+}
+
+float sampleTexture(sampler2D textureSampler, vec2 uv) {
+  return texture(textureSampler, uv).r;
+}
+
+uniform highp sampler2DArray A;
+uniform int offsetA;
+uniform ivec2 texShape;
 out vec4 outputColor;
-uniform sampler2D x;
+
+void setOutput(vec4 val) {
+  outputColor = val;
+}
+
+
+ivec3 getOutputCoords() {
+ivec2 resTexRC = ivec2(resultUV.yx *
+                        vec2(32, 32));
+int index = resTexRC.x * 32 + resTexRC.y;
+
+int b = index / 1024;
+index -= b * 1024;
+
+int r = 2 * (index / 8);
+int c = imod(index, 8) * 2;
+
+return ivec3(b, r, c);
+}
+
+
+  
+vec4 getA(int row, int col) {
+ivec3 coords = packedCoordsfrom2D(4, 64, 4, row, col);
+return texelFetch(A, coords, 0);
+}
+
+vec4 getA(int b, int row, int col) {
+return getA(row, col);
+}
+
+
+ivec3 outCoordsFromFlatIndex(int index) {
+int r = index / 4096; index -= r * 4096;int c = index / 16; int d = index - c * 16;
+return ivec3(r, c, d);
+}
 
 void main() {
-  outputColor = vec4(9,9,9,9);
+ivec2 resTexRC = ivec2(resultUV.yx * vec2(32, 32));
+int index = 4 * (resTexRC.x * 32 + resTexRC.y);
+
+vec4 result = vec4(0.);
+
+for (int i=0; i<4; i++) {
+  int flatIndex = index + i;
+  ivec3 rc = outCoordsFromFlatIndex(flatIndex);
+  result[i] = getChannel(getA(rc.x, rc.y, rc.z), vec2(rc.y, rc.z));
+  // result[i] = float(flatIndex);
+}
+
+outputColor = result;
+// outputColor = texelFetch(A, ivec3(0,0,0), 0);
 }
 `;
 
@@ -188,15 +265,37 @@ console.log(ys.join('\n'));
 
 
 const colorProgram2 = createProgram(gl, vs, colorFS2);
-const textureLocation2 = gl.getUniformLocation(colorProgram2, "x");
+const textureLocation2 = gl.getUniformLocation(colorProgram2, "A");
+
+// var texture2 = gl.createTexture();
+// gl.activeTexture(gl.TEXTURE2);
+// gl.bindTexture(gl.TEXTURE_2D, texture2);
+// gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+// gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+// gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+// gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+// gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, width, height, 0, gl.RGBA, gl.FLOAT, dataForUpload);
+
 var texture2 = gl.createTexture();
 gl.activeTexture(gl.TEXTURE2);
-gl.bindTexture(gl.TEXTURE_2D, texture2);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, width, height, 0, gl.RGBA, gl.FLOAT, dataForUpload);
+gl.bindTexture(gl.TEXTURE_2D_ARRAY, texture2);
+gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+gl.texImage3D(
+    gl.TEXTURE_2D_ARRAY,
+    0,
+    gl.RGBA32F,
+    width / 4,
+    height / 4,
+    4,
+    0,
+    gl.RGBA,
+    gl.FLOAT,
+    new Float32Array(Array.from(Array(width * height).keys())) 
+    // ().fill(16)
+);
 
 
 const output2 = gl.createTexture();
@@ -206,31 +305,31 @@ gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, width, height, 0, gl.RGBA, gl.FLOAT, null);
+gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, 32, 32, 0, gl.RGBA, gl.FLOAT, null);
 const fb2 = gl.createFramebuffer();
 gl.bindFramebuffer(gl.FRAMEBUFFER, fb2);
 gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, output2, 0);
 
-    gl.drawBuffers([
-      gl.COLOR_ATTACHMENT0
-    ]);
+gl.drawBuffers([
+  gl.COLOR_ATTACHMENT0
+]);
 
 function runProgram2() {
   // draw red rect to first texture through the framebuffer it's attached to
   gl.useProgram(colorProgram2);
-  gl.viewport(0, 0, width, height);
+  gl.viewport(0, 0, 32, 32);
   
   // Tell the shader to use texture unit 0 for u_texture
   gl.uniform1i(textureLocation2, 2);
   
   gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
   gl.bindFramebuffer(gl.FRAMEBUFFER, fb2)
-  const packedRGBA = new Float32Array(width * height * 4);
+  const packedRGBA = new Float32Array(width * height);
   gl.readPixels(
-            0, 0, width, height, gl.RGBA, gl.FLOAT, packedRGBA);
+            0, 0, 32, 32, gl.RGBA, gl.FLOAT, packedRGBA);
   return packedRGBA;
 }
 
-console.log(runProgram2().slice(0, 10).join('\n'));
+console.log(runProgram2());
 // console.log(runProgram().slice(0, 10).join('\n'));
 
