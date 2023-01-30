@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <link rel="canonical" href="https://jameshfisher.com/2020/08/31/edge-detection-with-sobel-filters/"/>
+        <link rel="manifest" href="/manifest.json"/>
+        <link rel="alternate" type="application/rss+xml" href="https://jameshfisher.com/feed.xml" />
+        <link href='https://d33wubrfki0l68.cloudfront.net/css/3144176cf83d740a381994301b29d533eb295d7f/assets/all.css' rel='stylesheet'/>
+    </head>
+<body>
+    <p><canvas id="display" style="max-width: initial; display: none;"></canvas></p>
+    <video id="webcamVideo" ></video>
+
+
+<script id="vertex-shader" type="glsl">
+    attribute vec2 c;
+    void main(void) { 
+      gl_Position=vec4(c, 0.0, 1.0); 
+    }
+</script>
+<script id="fragment-shader" type="glsl">
+    precision mediump float;
+    uniform sampler2D tex;
+    uniform vec2 texSize;
+    vec3 texRGB(vec2 coord) {
+      return texture2D(tex, coord).rgb;
+    }
+    vec3 sobel(vec2 coord, vec2 v, vec2 h) {
+      vec3 total = vec3(0.);
+      total += texRGB(coord + h - v);
+      total += texRGB(coord - h - v) * -1.;
+      total += texRGB(coord + h)     *  2.;
+      total += texRGB(coord - h)     * -2.;
+      total += texRGB(coord + h + v);
+      total += texRGB(coord - h + v) * -1.;
+
+      return total;
+    }
+    void main(void) {
+      vec2 coord = gl_FragCoord.xy / texSize;
+
+      vec2 pxSize = 1./texSize;
+
+      vec2 v = vec2(0., pxSize.y);
+      vec2 h = vec2(pxSize.x, 0.);
+
+      vec3 vertical = sobel(coord, v, h);
+      vec3 horizontal = sobel(coord, h, v);
+
+      gl_FragColor = vec4(sqrt(vertical*vertical + horizontal*horizontal), 1.);
+    }
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@4.2.0/dist/tf-core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.2.0/dist/tf-backend-webgl.min.js"></script>
+    <script src="./index.js"></script>
+</body>
+</html>

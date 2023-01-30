@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="canonical" href="https://jameshfisher.com/2020/08/31/edge-detection-with-sobel-filters/"/>
+    <link rel="manifest" href="/manifest.json"/>
+    <link rel="alternate" type="application/rss+xml" href="https://jameshfisher.com/feed.xml" />
+    <link href='https://d33wubrfki0l68.cloudfront.net/css/3144176cf83d740a381994301b29d533eb295d7f/assets/all.css' rel='stylesheet'/>
+  </head>
+  <body>
+    <div id="content">
+<p><canvas id="display" style="max-width: initial; display: none;"></canvas></p>
+<video id="webcamVideo" ></video>
+<script id="vertex-shader" type="glsl">
+    attribute vec2 c;
+    void main(void) { 
+      gl_Position=vec4(c, 0.0, 1.0); 
+    }
+</script>
+<script id="fragment-shader" type="glsl">
+    precision mediump float;
+    uniform sampler2D tex;
+    uniform vec2 texSize;
+    vec3 texRGB(vec2 coord) {
+      return texture2D(tex, coord).rgb;
+    }
+    vec3 sobel(vec2 coord, vec2 v, vec2 h) {
+      vec3 total = vec3(0.);
+      total += texRGB(coord + h - v);
+      total += texRGB(coord - h - v) * -1.;
+      total += texRGB(coord + h)     *  2.;
+      total += texRGB(coord - h)     * -2.;
+      total += texRGB(coord + h + v);
+      total += texRGB(coord - h + v) * -1.;
+
+      return total;
+    }
+    void main(void) {
+      vec2 coord = gl_FragCoord.xy / texSize;
+
+      vec2 pxSize = 1./texSize;
+
+      vec2 v = vec2(0., pxSize.y);
+      vec2 h = vec2(pxSize.x, 0.);
+
+      vec3 vertical = sobel(coord, v, h);
+      vec3 horizontal = sobel(coord, h, v);
+
+      gl_FragColor = vec4(sqrt(vertical*vertical + horizontal*horizontal), 1.);
+    }
+</script>
+<script type="text/javascript">
+    const webcamVideoEl = document.getElementById("webcamVideo");
+    const displayCanvasEl = document.getElementById("display");
+    const gl = displayCanvasEl.getContext("webgl");
+  
+    const vs = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vs, document.getElementById("vertex-shader").innerText);
+    gl.compileShader(vs);
+  
+    const fs = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fs, document.getElementById("fragment-shader").innerText);
+    gl.compileShader(fs);
+    if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
+      console.error(gl.getShaderInfoLog(fs));
+    }
+  
+    const prog = gl.createProgram();
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    gl.useProgram(prog);
+  
+    const vb = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([ -1,1,  -1,-1,  1,-1,  1,1 ]), gl.STATIC_DRAW);
+  
+    const coordLoc = gl.getAttribLocation(prog, 'c');
+    gl.vertexAttribPointer(coordLoc, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(coordLoc);
+  
+    gl.activeTexture(gl.TEXTURE0);
+    const tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    
+    const texLoc = gl.getUniformLocation(prog, "tex");
+    const texSizeLoc = gl.getUniformLocation(prog, "texSize");
+
+    function startWebcam() {
+      navigator.mediaDevices.getUserMedia({ video: { 
+            facingMode: "user",
+            width: { ideal: 320 },
+            height: { ideal: 240 } } }).then(stream => {
+        displayCanvasEl.style.display = "block";
+        webcamVideoEl.srcObject = stream;
+        webcamVideoEl.play();
+        function processFrame(now, metadata) {
+          displayCanvasEl.width = metadata.width;
+          displayCanvasEl.height = metadata.height;
+          gl.viewport(0, 0, metadata.width, metadata.height);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, webcamVideoEl);
+          gl.uniform1i(texLoc, 0);
+          gl.uniform2f(texSizeLoc, metadata.width, metadata.height);
+          gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+          webcamVideoEl.requestVideoFrameCallback(processFrame);
+        }
+        webcamVideoEl.requestVideoFrameCallback(processFrame);
+      }).catch(error => {
+        console.error(error);
+      });
+    }
+    startWebcam();
+</script>
+  </body>
+</html>
