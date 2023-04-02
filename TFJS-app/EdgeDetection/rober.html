@@ -6,6 +6,9 @@
     <link rel="manifest" href="/manifest.json"/>
     <link rel="alternate" type="application/rss+xml" href="https://jameshfisher.com/feed.xml" />
     <link href='https://d33wubrfki0l68.cloudfront.net/css/3144176cf83d740a381994301b29d533eb295d7f/assets/all.css' rel='stylesheet'/>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script> -->
+    <script src="https://unpkg.com/@tensorflow/tfjs-core@latest/dist/tf-core.js"> </script>
+    <script src="https://unpkg.com/@tensorflow/tfjs-backend-webgl@latest/dist/tf-backend-webgl.js"> </script>
   </head>
   <body>
     <div id="content">
@@ -35,7 +38,7 @@
 
       return total;
     }
-    void main(void) {
+    vec4 edge(void) {
       vec2 coord = gl_FragCoord.xy / texSize;
 
       vec2 pxSize = 1./texSize;
@@ -46,13 +49,31 @@
       vec3 vertical = sobel(coord, v, h);
       vec3 horizontal = sobel(coord, h, v);
 
-      gl_FragColor = vec4(sqrt(vertical*vertical + horizontal*horizontal), 1.);
+      return vec4(sqrt(vertical*vertical + horizontal*horizontal), 1.);
+    }
+
+    void main(void) {
+      vec2 coord = gl_FragCoord.xy / texSize;
+      gl_FragColor = vec4(texRGB(vec2(coord.x, 1. - coord.y)), 1.);
     }
 </script>
 <script type="text/javascript">
     const webcamVideoEl = document.getElementById("webcamVideo");
     const displayCanvasEl = document.getElementById("display");
-    const gl = displayCanvasEl.getContext("webgl");
+    let gl = displayCanvasEl.getContext("webgl");
+    tf.env().set('WEBGL_VERSION', 1);
+    tf.setWebGLContext(1, gl);
+    const ctx = new tf.GPGPUContext(gl);
+    const customBackend = new tf.MathBackendWebGL(ctx);
+    tf.registerBackend('custom-webgl', () => customBackend);
+    tf.setBackend('custom-webgl');
+    const kernels = tf.getKernelsForBackend('webgl');
+    kernels.forEach((kernelConfig) => {
+      const newKernelConfig = { ...kernelConfig, backendName: 'custom-webgl'};
+      tf.registerKernel(newKernelConfig);
+    });
+    filter = tf.ones([3,3,3,3]);
+  
   
     const vs = gl.createShader(gl.VERTEX_SHADER);
     gl.shaderSource(vs, document.getElementById("vertex-shader").innerText);
@@ -90,23 +111,44 @@
     const texLoc = gl.getUniformLocation(prog, "tex");
     const texSizeLoc = gl.getUniformLocation(prog, "texSize");
 
+    let val = [];
+          for (let number = 0; number < 512*512; number++) {
+            val.push(115,100,100);
+          }
+    const d = new Uint8Array(val);
+
+    const metadata = {height: 512, width:512};
+
     function startWebcam() {
       navigator.mediaDevices.getUserMedia({ video: { 
             facingMode: "user",
-            width: { ideal: 320 },
-            height: { ideal: 240 } } }).then(stream => {
+            width: { ideal: 512 },
+            height: { ideal: 512 } } }).then(stream => {
         displayCanvasEl.style.display = "block";
         webcamVideoEl.srcObject = stream;
         webcamVideoEl.play();
-        function processFrame(now, metadata) {
+
+        function processFrame(now) {
           displayCanvasEl.width = metadata.width;
           displayCanvasEl.height = metadata.height;
+          // a = tf.browser.fromPixels(webcamVideoEl).dataSync();
+          // b = tf.image.resizeBilinear(a, [512,512]);
+          // b = tf.zeros([512,512,3]);
+          // b = tf.tensor(data, [512,512,3], 'int32');
+          // c = tf.conv2d(b, filter, 1, 'same')
+          // data = new Uint8Array(a);
+
+
+          gl.bindTexture(gl.TEXTURE_2D, tex);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 512, 512, 0, gl.RGB, gl.UNSIGNED_BYTE, d);
+          // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, webcamVideoEl);
+          // d = b.dataToGPU().texture;
           gl.viewport(0, 0, metadata.width, metadata.height);
-          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, webcamVideoEl);
+          gl.useProgram(prog);
           gl.uniform1i(texLoc, 0);
           gl.uniform2f(texSizeLoc, metadata.width, metadata.height);
           gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-          webcamVideoEl.requestVideoFrameCallback(processFrame);
+          // webcamVideoEl.requestVideoFrameCallback(processFrame);
         }
         webcamVideoEl.requestVideoFrameCallback(processFrame);
       }).catch(error => {
