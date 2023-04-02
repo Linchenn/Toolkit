@@ -6,6 +6,9 @@
     <link rel="manifest" href="/manifest.json"/>
     <link rel="alternate" type="application/rss+xml" href="https://jameshfisher.com/feed.xml" />
     <link href='https://d33wubrfki0l68.cloudfront.net/css/3144176cf83d740a381994301b29d533eb295d7f/assets/all.css' rel='stylesheet'/>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script> -->
+    <script src="https://unpkg.com/@tensorflow/tfjs-core@latest/dist/tf-core.js"> </script>
+    <script src="https://unpkg.com/@tensorflow/tfjs-backend-webgl@latest/dist/tf-backend-webgl.js"> </script>
   </head>
   <body>
     <div id="content">
@@ -35,7 +38,7 @@
 
       return total;
     }
-    void main(void) {
+    vec4 edge(void) {
       vec2 coord = gl_FragCoord.xy / texSize;
 
       vec2 pxSize = 1./texSize;
@@ -46,14 +49,62 @@
       vec3 vertical = sobel(coord, v, h);
       vec3 horizontal = sobel(coord, h, v);
 
-      gl_FragColor = vec4(sqrt(vertical*vertical + horizontal*horizontal), 1.);
+      return vec4(sqrt(vertical*vertical + horizontal*horizontal), 1.);
+    }
+
+    void main(void) {
+      vec2 coord = gl_FragCoord.xy / texSize;
+      gl_FragColor = vec4(texRGB(vec2(coord.x, 1. - coord.y)), 1.);
     }
 </script>
 <script type="text/javascript">
     const webcamVideoEl = document.getElementById("webcamVideo");
     const displayCanvasEl = document.getElementById("display");
     const gl = displayCanvasEl.getContext("webgl");
-  
+
+    const fval = [
+      [[-1,-1,-1],
+      [1, 1, 1],
+      [0, 0, 0]],
+
+      [[-1, -1, -1],
+        [0,0,0],
+        [1,1,1]],
+
+      [[1,1,1], [0,0,0], [1,1,1]],
+
+      [[0,0,0], [1,1,1], [0,0,0]],
+      [[1,1,1], [-1,-1,-1], [1,1,1]],
+      [[-1,-1,-1], [-1,-1,-1], [0,0,0]],
+
+      [[0,0,0], [1,1,1], [1,1,1]],
+      [[1,1,1], [0,0,0], [-1,-1,-1]],
+      [[1,1,1], [-1,-1,-1], [1,1,1]]
+    ].flat().flat();
+    filter = tf.tensor4d(fval, [3,3,3,3], 'float32');
+
+    const fval1 = [
+      [[-1,-1,-1],
+      [0, 0, 0],
+      [0, 0, 0]],
+
+      [[-1, -1, -1],
+        [0,0,0],
+        [0, 0, 0]],
+
+      [[1,1,1], [0,0,0], [0, 0, 0]],
+
+      [[0,0,0], [0, 0, 0], [0,0,0]],
+      [[1,1,1], [0, 0, 0], [0, 0, 0]],
+      [[-1,-1,-1], [0, 0, 0], [0,0,0]],
+
+      [[0,0,0], [0, 0, 0], [0, 0, 0]],
+      [[1,1,1], [0,0,0], [0, 0, 0]],
+      [[1,1,1], [0, 0, 0], [0, 0, 0]]
+    ].flat().flat();
+    filter1 = tf.tensor4d(fval, [3,3,3,3], 'float32');
+
+
     const vs = gl.createShader(gl.VERTEX_SHADER);
     gl.shaderSource(vs, document.getElementById("vertex-shader").innerText);
     gl.compileShader(vs);
@@ -90,30 +141,76 @@
     const texLoc = gl.getUniformLocation(prog, "tex");
     const texSizeLoc = gl.getUniformLocation(prog, "texSize");
 
+    const data = [];
+          for (let number = 0; number < 512*512; number++) {
+            data.push(115,100,100);
+          }
+    const d = new Uint8Array(data);
+
+    const metadata = {height: 512, width:512};
+          displayCanvasEl.width = metadata.width;
+          displayCanvasEl.height = metadata.height;
+
+    let t0 = performance.now();
     function startWebcam() {
       navigator.mediaDevices.getUserMedia({ video: { 
             facingMode: "user",
-            width: { ideal: 320 },
-            height: { ideal: 240 } } }).then(stream => {
+            width: { ideal: metadata.width },
+            height: { ideal: metadata.height } } }).then(stream => {
         displayCanvasEl.style.display = "block";
         webcamVideoEl.srcObject = stream;
         webcamVideoEl.play();
-        function processFrame(now, metadata) {
-          displayCanvasEl.width = metadata.width;
-          displayCanvasEl.height = metadata.height;
+
+        function processFrame(frame = 0) {
+          const t1 = performance.now();
+          const data = tf.tidy(() => {
+            const image = tf.browser.fromPixels(webcamVideoEl);
+            const resize = tf.image.resizeBilinear(image, [metadata.height, metadata.width]);
+            const res = tf.conv2d(resize, filter1, 1, 'same');
+            // b = tf.tensor(data, [512,512,3], 'int32');
+            // c = tf.conv2d(b, filter, 1, 'same')
+            return new Uint8Array(res.dataSync());
+          });
+          // console.log(1000 / (performance.now() - start));
+
+
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, metadata.height, metadata.width, 0, gl.RGB, gl.UNSIGNED_BYTE, data);
+          // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, webcamVideoEl);
+          // d = b.dataToGPU().texture;
+          // gl.bindTexture(gl.TEXTURE_2D, d);
           gl.viewport(0, 0, metadata.width, metadata.height);
-          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, webcamVideoEl);
           gl.uniform1i(texLoc, 0);
           gl.uniform2f(texSizeLoc, metadata.width, metadata.height);
           gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-          webcamVideoEl.requestVideoFrameCallback(processFrame);
+          const t2 = performance.now();
+          // webcamVideoEl.requestVideoFrameCallback(processFrame);
+          if (frame % 10 === 0) { // print stats every 10 frames
+            console.log('frame', { frame, fps: Math.round(10000 / (t2 - t0)) / 10, real: Math.round(t2 - t0), inside: Math.round(t2 - t1), outside: Math.round(t1 - t0)});
+          }
+          t0 = t2;
+          webcamVideoEl.requestVideoFrameCallback(()=>{processFrame(++frame)});
         }
-        webcamVideoEl.requestVideoFrameCallback(processFrame);
+        webcamVideoEl.requestVideoFrameCallback(()=>processFrame(0));
       }).catch(error => {
         console.error(error);
       });
     }
     startWebcam();
+
+    function test() {
+      tf.tidy(() => {
+        const start = performance.now();
+        for (let i = 0; i < 100; i++) {
+          const image = tf.browser.fromPixels(webcamVideoEl);
+          const resize = tf.image.resizeBilinear(image, [metadata.height, metadata.width]);
+          const res = tf.conv2d(resize, filter1, 1, 'same');
+          // b = tf.tensor(data, [512,512,3], 'int32');
+          // c = tf.conv2d(b, filter, 1, 'same')
+          x =  new Uint8Array(res.dataSync());
+        }
+        console.log(1000 / (performance.now() - start) * 100);
+      });
+    }
 </script>
   </body>
 </html>
