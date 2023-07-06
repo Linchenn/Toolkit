@@ -76,7 +76,7 @@
         ];
         // Mark every third cell of the first grid as active.
         for (let i = 0; i < cellStateArray.length; i+=3) {
-          cellStateArray[i] = cellStateArray[i] = Math.random() > 0.6 ? 1 : 0;
+          cellStateArray[i] = Math.random() > 0.6 ? 1 : 0;
         }
         device.queue.writeBuffer(cellStateStorage[0], 0, cellStateArray);
 
@@ -160,7 +160,7 @@
                         cellActive(cell.x-1, cell.y+1) +
                         cellActive(cell.x, cell.y+1);
 
-                        let i = cellIndex(cell.xy);
+            let i = cellIndex(cell.xy);
 
             // Conway's game of life rules:
             switch activeNeighbors {
