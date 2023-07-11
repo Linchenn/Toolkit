@@ -1,0 +1,1091 @@
+<?xml version="1.0"?>
+<mapping>
+	<map>
+		<framework name="first_input" output_port_id="first_input" />
+		<IR name="first_input" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_770" output_port_id="first_onnx::Conv_770" />
+		<IR name="first_onnx::Conv_770" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_0" output_port_id="first_input.4" />
+		<IR name="first_Conv_0" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_1" output_port_id="first_input.8" />
+		<IR name="first_Relu_1" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_773" output_port_id="first_onnx::Conv_773" />
+		<IR name="first_onnx::Conv_773" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_2" output_port_id="first_input.16" />
+		<IR name="first_Conv_2" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_3" output_port_id="first_input.20" />
+		<IR name="first_Relu_3" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_776" output_port_id="first_onnx::Conv_776" />
+		<IR name="first_onnx::Conv_776" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_4" output_port_id="first_onnx::Add_775" />
+		<IR name="first_Conv_4" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_5" output_port_id="first_input.28" />
+		<IR name="first_Add_5" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_779" output_port_id="first_onnx::Conv_779" />
+		<IR name="first_onnx::Conv_779" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_6" output_port_id="first_input.36" />
+		<IR name="first_Conv_6" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_7" output_port_id="first_input.40" />
+		<IR name="first_Relu_7" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_782" output_port_id="first_onnx::Conv_782" />
+		<IR name="first_onnx::Conv_782" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_8" output_port_id="first_input.48" />
+		<IR name="first_Conv_8" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_9" output_port_id="first_input.52" />
+		<IR name="first_Relu_9" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_785" output_port_id="first_onnx::Conv_785" />
+		<IR name="first_onnx::Conv_785" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_10" output_port_id="first_input.60" />
+		<IR name="first_Conv_10" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_788" output_port_id="first_onnx::Conv_788" />
+		<IR name="first_onnx::Conv_788" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_11" output_port_id="first_input.68" />
+		<IR name="first_Conv_11" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_12" output_port_id="first_input.72" />
+		<IR name="first_Relu_12" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_791" output_port_id="first_onnx::Conv_791" />
+		<IR name="first_onnx::Conv_791" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_13" output_port_id="first_input.80" />
+		<IR name="first_Conv_13" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_14" output_port_id="first_input.84" />
+		<IR name="first_Relu_14" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_794" output_port_id="first_onnx::Conv_794" />
+		<IR name="first_onnx::Conv_794" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_15" output_port_id="first_onnx::Add_793" />
+		<IR name="first_Conv_15" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_16" output_port_id="first_input.92" />
+		<IR name="first_Add_16" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_797" output_port_id="first_onnx::Conv_797" />
+		<IR name="first_onnx::Conv_797" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_17" output_port_id="first_input.100" />
+		<IR name="first_Conv_17" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_18" output_port_id="first_input.104" />
+		<IR name="first_Relu_18" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_800" output_port_id="first_onnx::Conv_800" />
+		<IR name="first_onnx::Conv_800" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_19" output_port_id="first_input.112" />
+		<IR name="first_Conv_19" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_20" output_port_id="first_input.116" />
+		<IR name="first_Relu_20" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_803" output_port_id="first_onnx::Conv_803" />
+		<IR name="first_onnx::Conv_803" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_21" output_port_id="first_input.124" />
+		<IR name="first_Conv_21" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_806" output_port_id="first_onnx::Conv_806" />
+		<IR name="first_onnx::Conv_806" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_22" output_port_id="first_input.132" />
+		<IR name="first_Conv_22" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_23" output_port_id="first_input.136" />
+		<IR name="first_Relu_23" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_809" output_port_id="first_onnx::Conv_809" />
+		<IR name="first_onnx::Conv_809" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_24" output_port_id="first_input.144" />
+		<IR name="first_Conv_24" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_25" output_port_id="first_input.148" />
+		<IR name="first_Relu_25" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_812" output_port_id="first_onnx::Conv_812" />
+		<IR name="first_onnx::Conv_812" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_26" output_port_id="first_onnx::Add_811" />
+		<IR name="first_Conv_26" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_27" output_port_id="first_input.156" />
+		<IR name="first_Add_27" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_932" output_port_id="first_onnx::Conv_932" />
+		<IR name="first_onnx::Conv_932" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_178" output_port_id="first_onnx::Mul_931" />
+		<IR name="first_Conv_178" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_AveragePool_56" output_port_id="first_onnx::Concat_481" />
+		<IR name="first_AveragePool_56" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_AveragePool_57" output_port_id="first_onnx::Concat_482" />
+		<IR name="first_AveragePool_57" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_815" output_port_id="first_onnx::Conv_815" />
+		<IR name="first_onnx::Conv_815" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_28" output_port_id="first_input.164" />
+		<IR name="first_Conv_28" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_29" output_port_id="first_input.168" />
+		<IR name="first_Relu_29" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_818" output_port_id="first_onnx::Conv_818" />
+		<IR name="first_onnx::Conv_818" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_30" output_port_id="first_input.176" />
+		<IR name="first_Conv_30" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_31" output_port_id="first_input.180" />
+		<IR name="first_Relu_31" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_821" output_port_id="first_onnx::Conv_821" />
+		<IR name="first_onnx::Conv_821" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_32" output_port_id="first_input.188" />
+		<IR name="first_Conv_32" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_824" output_port_id="first_onnx::Conv_824" />
+		<IR name="first_onnx::Conv_824" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_33" output_port_id="first_input.196" />
+		<IR name="first_Conv_33" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_34" output_port_id="first_input.200" />
+		<IR name="first_Relu_34" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_827" output_port_id="first_onnx::Conv_827" />
+		<IR name="first_onnx::Conv_827" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_35" output_port_id="first_input.208" />
+		<IR name="first_Conv_35" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_36" output_port_id="first_input.212" />
+		<IR name="first_Relu_36" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_830" output_port_id="first_onnx::Conv_830" />
+		<IR name="first_onnx::Conv_830" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_37" output_port_id="first_onnx::Add_829" />
+		<IR name="first_Conv_37" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_38" output_port_id="first_input.220" />
+		<IR name="first_Add_38" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_AveragePool_58" output_port_id="first_onnx::Concat_483" />
+		<IR name="first_AveragePool_58" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_833" output_port_id="first_onnx::Conv_833" />
+		<IR name="first_onnx::Conv_833" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_39" output_port_id="first_input.228" />
+		<IR name="first_Conv_39" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_40" output_port_id="first_input.232" />
+		<IR name="first_Relu_40" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_836" output_port_id="first_onnx::Conv_836" />
+		<IR name="first_onnx::Conv_836" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_41" output_port_id="first_input.240" />
+		<IR name="first_Conv_41" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_42" output_port_id="first_input.244" />
+		<IR name="first_Relu_42" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_839" output_port_id="first_onnx::Conv_839" />
+		<IR name="first_onnx::Conv_839" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_43" output_port_id="first_input.252" />
+		<IR name="first_Conv_43" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_842" output_port_id="first_onnx::Conv_842" />
+		<IR name="first_onnx::Conv_842" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_44" output_port_id="first_input.260" />
+		<IR name="first_Conv_44" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_45" output_port_id="first_input.264" />
+		<IR name="first_Relu_45" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_845" output_port_id="first_onnx::Conv_845" />
+		<IR name="first_onnx::Conv_845" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_46" output_port_id="first_input.272" />
+		<IR name="first_Conv_46" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_47" output_port_id="first_input.276" />
+		<IR name="first_Relu_47" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_848" output_port_id="first_onnx::Conv_848" />
+		<IR name="first_onnx::Conv_848" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_48" output_port_id="first_onnx::Add_847" />
+		<IR name="first_Conv_48" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_49" output_port_id="first_input.284" />
+		<IR name="first_Add_49" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_851" output_port_id="first_onnx::Conv_851" />
+		<IR name="first_onnx::Conv_851" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_50" output_port_id="first_input.292" />
+		<IR name="first_Conv_50" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_51" output_port_id="first_input.296" />
+		<IR name="first_Relu_51" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_854" output_port_id="first_onnx::Conv_854" />
+		<IR name="first_onnx::Conv_854" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_52" output_port_id="first_input.304" />
+		<IR name="first_Conv_52" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_53" output_port_id="first_input.308" />
+		<IR name="first_Relu_53" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_857" output_port_id="first_onnx::Conv_857" />
+		<IR name="first_onnx::Conv_857" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_54" output_port_id="first_onnx::Add_856" />
+		<IR name="first_Conv_54" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_55" output_port_id="first_inp" />
+		<IR name="first_Add_55" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_AveragePool_59" output_port_id="first_onnx::Concat_484" />
+		<IR name="first_AveragePool_59" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_Concat_60" output_port_id="first_x" />
+		<IR name="first_Concat_60" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_860" output_port_id="first_onnx::Conv_860" />
+		<IR name="first_onnx::Conv_860" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_61" output_port_id="first_onnx::Reshape_859" />
+		<IR name="first_Conv_61" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_48819125" output_port_id="first_onnx::Reshape_488" />
+		<IR name="first_onnx::Reshape_48819125" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_63" output_port_id="first_onnx::Transpose_489" />
+		<IR name="first_Reshape_63" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Transpose_64" output_port_id="first_onnx::MatMul_490" />
+		<IR name="first_Transpose_64" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_863" output_port_id="first_onnx::Conv_863" />
+		<IR name="first_onnx::Conv_863" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_65" output_port_id="first_onnx::Reshape_862" />
+		<IR name="first_Conv_65" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_48819170" output_port_id="first_onnx::Reshape_488" />
+		<IR name="first_onnx::Reshape_48819170" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_67" output_port_id="first_onnx::MatMul_494" />
+		<IR name="first_Reshape_67" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_MatMul_72" output_port_id="first_onnx::Softmax_500" />
+		<IR name="first_MatMul_72" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Softmax_73" output_port_id="first_onnx::MatMul_501" />
+		<IR name="first_Softmax_73" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_866" output_port_id="first_onnx::Conv_866" />
+		<IR name="first_onnx::Conv_866" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_68" output_port_id="first_onnx::Reshape_865" />
+		<IR name="first_Conv_68" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_497" output_port_id="first_onnx::Reshape_497" />
+		<IR name="first_onnx::Reshape_497" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_70" output_port_id="first_onnx::Transpose_498" />
+		<IR name="first_Reshape_70" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Transpose_71" output_port_id="first_onnx::MatMul_499" />
+		<IR name="first_Transpose_71" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_MatMul_74" output_port_id="first_onnx::Transpose_502" />
+		<IR name="first_MatMul_74" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Transpose_75" output_port_id="first_onnx::Reshape_503" />
+		<IR name="first_Transpose_75" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_50419299" output_port_id="first_onnx::Reshape_504" />
+		<IR name="first_onnx::Reshape_50419299" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_77" output_port_id="first_input.328" />
+		<IR name="first_Reshape_77" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Clip_80" output_port_id="first_input.332" />
+		<IR name="first_Clip_80" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_869" output_port_id="first_onnx::Conv_869" />
+		<IR name="first_onnx::Conv_869" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_81" output_port_id="first_onnx::Add_868" />
+		<IR name="first_Conv_81" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_82" output_port_id="first_input.340" />
+		<IR name="first_Add_82" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_872" output_port_id="first_onnx::Conv_872" />
+		<IR name="first_onnx::Conv_872" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_83" output_port_id="first_input.348" />
+		<IR name="first_Conv_83" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_backbone.trans.transformer_blocks.0.mlp.dwconv.weight" output_port_id="first_backbone.trans.transformer_blocks.0.mlp.dwconv.weight" />
+		<IR name="first_backbone.trans.transformer_blocks.0.mlp.dwconv.weight" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_84" output_port_id="first_input.352" />
+		<IR name="first_Conv_84" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Clip_87" output_port_id="first_input.356" />
+		<IR name="first_Clip_87" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_875" output_port_id="first_onnx::Conv_875" />
+		<IR name="first_onnx::Conv_875" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_88" output_port_id="first_input.364" />
+		<IR name="first_Conv_88" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_89" output_port_id="first_x.3" />
+		<IR name="first_Add_89" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_878" output_port_id="first_onnx::Conv_878" />
+		<IR name="first_onnx::Conv_878" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_90" output_port_id="first_onnx::Reshape_877" />
+		<IR name="first_Conv_90" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_48819641" output_port_id="first_onnx::Reshape_488" />
+		<IR name="first_onnx::Reshape_48819641" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_92" output_port_id="first_onnx::Transpose_524" />
+		<IR name="first_Reshape_92" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Transpose_93" output_port_id="first_onnx::MatMul_525" />
+		<IR name="first_Transpose_93" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_881" output_port_id="first_onnx::Conv_881" />
+		<IR name="first_onnx::Conv_881" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_94" output_port_id="first_onnx::Reshape_880" />
+		<IR name="first_Conv_94" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_48819767" output_port_id="first_onnx::Reshape_488" />
+		<IR name="first_onnx::Reshape_48819767" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_96" output_port_id="first_onnx::MatMul_529" />
+		<IR name="first_Reshape_96" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_MatMul_101" output_port_id="first_onnx::Softmax_535" />
+		<IR name="first_MatMul_101" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Softmax_102" output_port_id="first_onnx::MatMul_536" />
+		<IR name="first_Softmax_102" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_884" output_port_id="first_onnx::Conv_884" />
+		<IR name="first_onnx::Conv_884" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_97" output_port_id="first_onnx::Reshape_883" />
+		<IR name="first_Conv_97" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_49719743" output_port_id="first_onnx::Reshape_497" />
+		<IR name="first_onnx::Reshape_49719743" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_99" output_port_id="first_onnx::Transpose_533" />
+		<IR name="first_Reshape_99" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Transpose_100" output_port_id="first_onnx::MatMul_534" />
+		<IR name="first_Transpose_100" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_MatMul_103" output_port_id="first_onnx::Transpose_537" />
+		<IR name="first_MatMul_103" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Transpose_104" output_port_id="first_onnx::Reshape_538" />
+		<IR name="first_Transpose_104" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_50419503" output_port_id="first_onnx::Reshape_504" />
+		<IR name="first_onnx::Reshape_50419503" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_106" output_port_id="first_input.380" />
+		<IR name="first_Reshape_106" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Clip_109" output_port_id="first_input.384" />
+		<IR name="first_Clip_109" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_887" output_port_id="first_onnx::Conv_887" />
+		<IR name="first_onnx::Conv_887" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_110" output_port_id="first_onnx::Add_886" />
+		<IR name="first_Conv_110" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_111" output_port_id="first_input.392" />
+		<IR name="first_Add_111" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_890" output_port_id="first_onnx::Conv_890" />
+		<IR name="first_onnx::Conv_890" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_112" output_port_id="first_input.400" />
+		<IR name="first_Conv_112" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_backbone.trans.transformer_blocks.1.mlp.dwconv.weight" output_port_id="first_backbone.trans.transformer_blocks.1.mlp.dwconv.weight" />
+		<IR name="first_backbone.trans.transformer_blocks.1.mlp.dwconv.weight" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_113" output_port_id="first_input.404" />
+		<IR name="first_Conv_113" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Clip_116" output_port_id="first_input.408" />
+		<IR name="first_Clip_116" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_893" output_port_id="first_onnx::Conv_893" />
+		<IR name="first_onnx::Conv_893" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_117" output_port_id="first_input.416" />
+		<IR name="first_Conv_117" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_118" output_port_id="first_x.7" />
+		<IR name="first_Add_118" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_896" output_port_id="first_onnx::Conv_896" />
+		<IR name="first_onnx::Conv_896" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_119" output_port_id="first_onnx::Reshape_895" />
+		<IR name="first_Conv_119" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_488" output_port_id="first_onnx::Reshape_488" />
+		<IR name="first_onnx::Reshape_488" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_121" output_port_id="first_onnx::Transpose_559" />
+		<IR name="first_Reshape_121" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Transpose_122" output_port_id="first_onnx::MatMul_560" />
+		<IR name="first_Transpose_122" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_899" output_port_id="first_onnx::Conv_899" />
+		<IR name="first_onnx::Conv_899" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_123" output_port_id="first_onnx::Reshape_898" />
+		<IR name="first_Conv_123" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_48819797" output_port_id="first_onnx::Reshape_488" />
+		<IR name="first_onnx::Reshape_48819797" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_125" output_port_id="first_onnx::MatMul_564" />
+		<IR name="first_Reshape_125" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_MatMul_130" output_port_id="first_onnx::Softmax_570" />
+		<IR name="first_MatMul_130" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Softmax_131" output_port_id="first_onnx::MatMul_571" />
+		<IR name="first_Softmax_131" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_902" output_port_id="first_onnx::Conv_902" />
+		<IR name="first_onnx::Conv_902" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_126" output_port_id="first_onnx::Reshape_901" />
+		<IR name="first_Conv_126" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_49719533" output_port_id="first_onnx::Reshape_497" />
+		<IR name="first_onnx::Reshape_49719533" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_128" output_port_id="first_onnx::Transpose_568" />
+		<IR name="first_Reshape_128" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Transpose_129" output_port_id="first_onnx::MatMul_569" />
+		<IR name="first_Transpose_129" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_MatMul_132" output_port_id="first_onnx::Transpose_572" />
+		<IR name="first_MatMul_132" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Transpose_133" output_port_id="first_onnx::Reshape_573" />
+		<IR name="first_Transpose_133" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_504" output_port_id="first_onnx::Reshape_504" />
+		<IR name="first_onnx::Reshape_504" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_135" output_port_id="first_input.432" />
+		<IR name="first_Reshape_135" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Clip_138" output_port_id="first_input.436" />
+		<IR name="first_Clip_138" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_905" output_port_id="first_onnx::Conv_905" />
+		<IR name="first_onnx::Conv_905" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_139" output_port_id="first_onnx::Add_904" />
+		<IR name="first_Conv_139" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_140" output_port_id="first_input.444" />
+		<IR name="first_Add_140" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_908" output_port_id="first_onnx::Conv_908" />
+		<IR name="first_onnx::Conv_908" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_141" output_port_id="first_input.452" />
+		<IR name="first_Conv_141" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_backbone.trans.transformer_blocks.2.mlp.dwconv.weight" output_port_id="first_backbone.trans.transformer_blocks.2.mlp.dwconv.weight" />
+		<IR name="first_backbone.trans.transformer_blocks.2.mlp.dwconv.weight" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_142" output_port_id="first_input.456" />
+		<IR name="first_Conv_142" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Clip_145" output_port_id="first_input.460" />
+		<IR name="first_Clip_145" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_911" output_port_id="first_onnx::Conv_911" />
+		<IR name="first_onnx::Conv_911" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_146" output_port_id="first_input.468" />
+		<IR name="first_Conv_146" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_147" output_port_id="first_x.11" />
+		<IR name="first_Add_147" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_914" output_port_id="first_onnx::Conv_914" />
+		<IR name="first_onnx::Conv_914" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_148" output_port_id="first_onnx::Reshape_913" />
+		<IR name="first_Conv_148" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_48819200" output_port_id="first_onnx::Reshape_488" />
+		<IR name="first_onnx::Reshape_48819200" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_150" output_port_id="first_onnx::Transpose_594" />
+		<IR name="first_Reshape_150" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Transpose_151" output_port_id="first_onnx::MatMul_595" />
+		<IR name="first_Transpose_151" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_917" output_port_id="first_onnx::Conv_917" />
+		<IR name="first_onnx::Conv_917" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_152" output_port_id="first_onnx::Reshape_916" />
+		<IR name="first_Conv_152" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_48819497" output_port_id="first_onnx::Reshape_488" />
+		<IR name="first_onnx::Reshape_48819497" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_154" output_port_id="first_onnx::MatMul_599" />
+		<IR name="first_Reshape_154" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_MatMul_159" output_port_id="first_onnx::Softmax_605" />
+		<IR name="first_MatMul_159" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Softmax_160" output_port_id="first_onnx::MatMul_606" />
+		<IR name="first_Softmax_160" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_920" output_port_id="first_onnx::Conv_920" />
+		<IR name="first_onnx::Conv_920" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_155" output_port_id="first_onnx::Reshape_919" />
+		<IR name="first_Conv_155" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_49719368" output_port_id="first_onnx::Reshape_497" />
+		<IR name="first_onnx::Reshape_49719368" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_157" output_port_id="first_onnx::Transpose_603" />
+		<IR name="first_Reshape_157" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Transpose_158" output_port_id="first_onnx::MatMul_604" />
+		<IR name="first_Transpose_158" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_MatMul_161" output_port_id="first_onnx::Transpose_607" />
+		<IR name="first_MatMul_161" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Transpose_162" output_port_id="first_onnx::Reshape_608" />
+		<IR name="first_Transpose_162" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Reshape_50419623" output_port_id="first_onnx::Reshape_504" />
+		<IR name="first_onnx::Reshape_50419623" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Reshape_164" output_port_id="first_input.484" />
+		<IR name="first_Reshape_164" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Clip_167" output_port_id="first_input.488" />
+		<IR name="first_Clip_167" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_923" output_port_id="first_onnx::Conv_923" />
+		<IR name="first_onnx::Conv_923" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_168" output_port_id="first_onnx::Add_922" />
+		<IR name="first_Conv_168" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_169" output_port_id="first_input.496" />
+		<IR name="first_Add_169" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_926" output_port_id="first_onnx::Conv_926" />
+		<IR name="first_onnx::Conv_926" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_170" output_port_id="first_input.504" />
+		<IR name="first_Conv_170" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_backbone.trans.transformer_blocks.3.mlp.dwconv.weight" output_port_id="first_backbone.trans.transformer_blocks.3.mlp.dwconv.weight" />
+		<IR name="first_backbone.trans.transformer_blocks.3.mlp.dwconv.weight" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_171" output_port_id="first_input.508" />
+		<IR name="first_Conv_171" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Clip_174" output_port_id="first_input.512" />
+		<IR name="first_Clip_174" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_929" output_port_id="first_onnx::Conv_929" />
+		<IR name="first_onnx::Conv_929" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_175" output_port_id="first_input.520" />
+		<IR name="first_Conv_175" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Add_176" output_port_id="first_out" />
+		<IR name="first_Add_176" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Split_177/VariadicSplit" output_port_id="first_input.524" />
+		<IR name="first_Split_177/VariadicSplit" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="first_Split_177/VariadicSplit" output_port_id="first_input.528" />
+		<IR name="first_Split_177/VariadicSplit" output_port_id="5" />
+	</map>
+	<map>
+		<framework name="first_Split_177/VariadicSplit" output_port_id="first_input.532" />
+		<IR name="first_Split_177/VariadicSplit" output_port_id="6" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_935" output_port_id="first_onnx::Conv_935" />
+		<IR name="first_onnx::Conv_935" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_179/Fused_Add_" output_port_id="first_input.544" />
+		<IR name="first_Conv_179/Fused_Add_" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Clip_184" output_port_id="first_onnx::Div_638" />
+		<IR name="first_Clip_184" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Clip_50719626" output_port_id="first_onnx::Clip_507" />
+		<IR name="first_onnx::Clip_50719626" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Div_186" output_port_id="first_onnx::Shape_640" />
+		<IR name="first_Div_186" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Resize_195" output_port_id="first_onnx::Mul_651" />
+		<IR name="first_Resize_195" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="first_Mul_206" output_port_id="first_onnx::Add_665" />
+		<IR name="first_Mul_206" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_938" output_port_id="first_onnx::Conv_938" />
+		<IR name="first_onnx::Conv_938" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_196" output_port_id="first_global_feat" />
+		<IR name="first_Conv_196" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Resize_205" output_port_id="first_onnx::Add_664" />
+		<IR name="first_Resize_205" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="first_Add_207" output_port_id="first_outs" />
+		<IR name="first_Add_207" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_941" output_port_id="first_onnx::Conv_941" />
+		<IR name="first_onnx::Conv_941" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_208" output_port_id="first_onnx::Mul_940" />
+		<IR name="first_Conv_208" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_944" output_port_id="first_onnx::Conv_944" />
+		<IR name="first_onnx::Conv_944" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_209/Fused_Add_" output_port_id="first_input.560" />
+		<IR name="first_Conv_209/Fused_Add_" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Clip_214" output_port_id="first_onnx::Div_675" />
+		<IR name="first_Clip_214" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Clip_50719698" output_port_id="first_onnx::Clip_507" />
+		<IR name="first_onnx::Clip_50719698" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Div_216" output_port_id="first_onnx::Shape_677" />
+		<IR name="first_Div_216" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Resize_225" output_port_id="first_onnx::Mul_688" />
+		<IR name="first_Resize_225" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="first_Mul_236" output_port_id="first_onnx::Add_702" />
+		<IR name="first_Mul_236" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_947" output_port_id="first_onnx::Conv_947" />
+		<IR name="first_onnx::Conv_947" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_226" output_port_id="first_global_feat.3" />
+		<IR name="first_Conv_226" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Resize_235" output_port_id="first_onnx::Add_701" />
+		<IR name="first_Resize_235" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="first_Add_237" output_port_id="first_input.568" />
+		<IR name="first_Add_237" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Resize_276" output_port_id="first_onnx::Add_751" />
+		<IR name="first_Resize_276" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="first_Add_277" output_port_id="first_onnx::Add_752" />
+		<IR name="first_Add_277" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_950" output_port_id="first_onnx::Conv_950" />
+		<IR name="first_onnx::Conv_950" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_238" output_port_id="first_onnx::Mul_949" />
+		<IR name="first_Conv_238" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_953" output_port_id="first_onnx::Conv_953" />
+		<IR name="first_onnx::Conv_953" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_239/Fused_Add_" output_port_id="first_input.580" />
+		<IR name="first_Conv_239/Fused_Add_" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Clip_244" output_port_id="first_onnx::Div_712" />
+		<IR name="first_Clip_244" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_onnx::Clip_507" output_port_id="first_onnx::Clip_507" />
+		<IR name="first_onnx::Clip_507" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Div_246" output_port_id="first_onnx::Shape_714" />
+		<IR name="first_Div_246" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Resize_255" output_port_id="first_onnx::Mul_725" />
+		<IR name="first_Resize_255" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="first_Mul_266" output_port_id="first_onnx::Add_739" />
+		<IR name="first_Mul_266" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_956" output_port_id="first_onnx::Conv_956" />
+		<IR name="first_onnx::Conv_956" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_256" output_port_id="first_global_feat.7" />
+		<IR name="first_Conv_256" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Resize_265" output_port_id="first_onnx::Add_738" />
+		<IR name="first_Resize_265" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="first_Add_267" output_port_id="first_input.588" />
+		<IR name="first_Add_267" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Resize_286" output_port_id="first_onnx::Add_763" />
+		<IR name="first_Resize_286" output_port_id="4" />
+	</map>
+	<map>
+		<framework name="first_Add_287" output_port_id="first_input.592" />
+		<IR name="first_Add_287" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_onnx::Conv_959" output_port_id="first_onnx::Conv_959" />
+		<IR name="first_onnx::Conv_959" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_288" output_port_id="first_input.600" />
+		<IR name="first_Conv_288" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="first_Relu_289" output_port_id="first_onnx::Conv_767" />
+		<IR name="first_Relu_289" output_port_id="1" />
+	</map>
+	<map>
+		<framework name="first_decode_head.conv_seg.weight" output_port_id="first_decode_head.conv_seg.weight" />
+		<IR name="first_decode_head.conv_seg.weight" output_port_id="0" />
+	</map>
+	<map>
+		<framework name="first_Conv_290" output_port_id="first_output" />
+		<IR name="first_Conv_290" output_port_id="2" />
+	</map>
+	<map>
+		<framework name="6427" output_port_id="second_output" />
+		<IR name="6427" output_port_id="3" />
+	</map>
+</mapping>
