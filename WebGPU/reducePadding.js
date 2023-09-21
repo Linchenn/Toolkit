@@ -45,7 +45,7 @@ async function readBuffer(buffer, bufferSize) {
 ini();
 
 function reduceBuffer(validChannels) {
-    const WORKGROUP_SIZE = 8;
+    const WORKGROUP_SIZE = 1;
     const paddingChannels = Math.ceil(validChannels / 4) * 4;
     const SRC_BUFFER_SIZE =  3 * paddingChannels * 4;
     const DST_BUFFER_SIZE =  3 * validChannels * 4;
@@ -86,7 +86,7 @@ function reduceBuffer(validChannels) {
         @group(0) @binding(1) var<storage, read_write> cellStateIn: array<f32>;
         @group(0) @binding(2) var<storage, read_write> cellStateOut: array<f32>;
 
-        @compute @workgroup_size(${WORKGROUP_SIZE}, 1)
+        @compute @workgroup_size(${WORKGROUP_SIZE}, ${WORKGROUP_SIZE})
         fn computeMain(@builtin(global_invocation_id) cell: vec3u) {
             let outputIndex = cell.x;
             let inputIndex = outputIndex / grid.x * grid.y + outputIndex % grid.x;
@@ -148,8 +148,8 @@ function reduceBuffer(validChannels) {
     const computePass = encoder.beginComputePass();
     computePass.setPipeline(simulationPipeline),
     computePass.setBindGroup(0, bindGroup);
-    const workgroupCount = Math.ceil(DST_BUFFER_SIZE / 4 / WORKGROUP_SIZE);
-    computePass.dispatchWorkgroups(workgroupCount, 1);
+    // const workgroupCount = Math.ceil(Math.sqrt(DST_BUFFER_SIZE / 4 / 1));
+    computePass.dispatchWorkgroups(DST_BUFFER_SIZE / 4);
     computePass.end();
     device.queue.submit([encoder.finish()]);
 
