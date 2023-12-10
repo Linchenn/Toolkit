@@ -24,12 +24,12 @@ def inference(model, shape=[1, 224, 224, 3]):
 
 
 model = ResNet152(weights='imagenet')
-convertAndSaveModels(model, 'resnet152')
+saveFreezeModel(model)
 
-# model = ResNet50(weights='imagenet')
-# saveModels(model, 'resnet50')
+model = ResNet50(weights='imagenet')
+saveModels(model, 'resnet50')
 
-# model = ResNet101(weights='imagenet')
-# saveModels(model, 'resnet101')
+model = ResNet101(weights='imagenet')
+saveModels(model, 'resnet101')
 
 
