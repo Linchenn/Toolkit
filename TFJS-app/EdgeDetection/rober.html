@@ -60,9 +60,9 @@
 <script type="text/javascript">
     const webcamVideoEl = document.getElementById("webcamVideo");
     const displayCanvasEl = document.getElementById("display");
-    let gl = displayCanvasEl.getContext("webgl");
-    tf.env().set('WEBGL_VERSION', 1);
-    tf.setWebGLContext(1, gl);
+    let gl = displayCanvasEl.getContext("webgl2");
+    tf.env().set('WEBGL_VERSION', 2);
+    tf.setWebGLContext(2, gl);
     const ctx = new tf.GPGPUContext(gl);
     const customBackend = new tf.MathBackendWebGL(ctx);
     tf.registerBackend('custom-webgl', () => customBackend);
@@ -75,47 +75,47 @@
     filter = tf.ones([3,3,3,3]);
   
   
-    const vs = gl.createShader(gl.VERTEX_SHADER);
-    gl.shaderSource(vs, document.getElementById("vertex-shader").innerText);
-    gl.compileShader(vs);
+    // const vs = gl.createShader(gl.VERTEX_SHADER);
+    // gl.shaderSource(vs, document.getElementById("vertex-shader").innerText);
+    // gl.compileShader(vs);
   
-    const fs = gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(fs, document.getElementById("fragment-shader").innerText);
-    gl.compileShader(fs);
-    if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
-      console.error(gl.getShaderInfoLog(fs));
-    }
+    // const fs = gl.createShader(gl.FRAGMENT_SHADER);
+    // gl.shaderSource(fs, document.getElementById("fragment-shader").innerText);
+    // gl.compileShader(fs);
+    // if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
+    //   console.error(gl.getShaderInfoLog(fs));
+    // }
   
-    const prog = gl.createProgram();
-    gl.attachShader(prog, vs);
-    gl.attachShader(prog, fs);
-    gl.linkProgram(prog);
-    gl.useProgram(prog);
+    // const prog = gl.createProgram();
+    // gl.attachShader(prog, vs);
+    // gl.attachShader(prog, fs);
+    // gl.linkProgram(prog);
+    // gl.useProgram(prog);
   
-    const vb = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vb);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([ -1,1,  -1,-1,  1,-1,  1,1 ]), gl.STATIC_DRAW);
+    // const vb = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([ -1,1,  -1,-1,  1,-1,  1,1 ]), gl.STATIC_DRAW);
   
-    const coordLoc = gl.getAttribLocation(prog, 'c');
-    gl.vertexAttribPointer(coordLoc, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(coordLoc);
+    // const coordLoc = gl.getAttribLocation(prog, 'c');
+    // gl.vertexAttribPointer(coordLoc, 2, gl.FLOAT, false, 0, 0);
+    // gl.enableVertexAttribArray(coordLoc);
   
-    gl.activeTexture(gl.TEXTURE0);
-    const tex = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, tex);
+    // gl.activeTexture(gl.TEXTURE0);
+    // const tex = gl.createTexture();
+    // gl.bindTexture(gl.TEXTURE_2D, tex);
 
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     
-    const texLoc = gl.getUniformLocation(prog, "tex");
-    const texSizeLoc = gl.getUniformLocation(prog, "texSize");
+    // const texLoc = gl.getUniformLocation(prog, "tex");
+    // const texSizeLoc = gl.getUniformLocation(prog, "texSize");
 
-    let val = [];
-          for (let number = 0; number < 512*512; number++) {
-            val.push(115,100,100);
-          }
-    const d = new Uint8Array(val);
+    // let val = [];
+    //       for (let number = 0; number < 512*512; number++) {
+    //         val.push(115,100,100);
+    //       }
+    // const d = new Uint8Array(val);
 
     const metadata = {height: 512, width:512};
 
@@ -131,26 +131,46 @@
         function processFrame(now) {
           displayCanvasEl.width = metadata.width;
           displayCanvasEl.height = metadata.height;
-          // a = tf.browser.fromPixels(webcamVideoEl).dataSync();
-          // b = tf.image.resizeBilinear(a, [512,512]);
+          a = tf.browser.fromPixels(webcamVideoEl);
+          b = tf.image.resizeBilinear(a, [512,512]);
           // b = tf.zeros([512,512,3]);
           // b = tf.tensor(data, [512,512,3], 'int32');
-          // c = tf.conv2d(b, filter, 1, 'same')
+          c = tf.conv2d(b, filter, 1, 'same').dataToGPU({customTexShape: [metadata.height, metadata.width]});
+          // Once we have the texture, we can bind it and pass it to the downstream
           // data = new Uint8Array(a);
+          
+          gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null);
+          // webgl processing steps to use the texture.
+          // gl.bindTexture(gl.TEXTURE_2D, c.texture);
+          gl.framebufferTexture2D(
+              gl.READ_FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, c.texture, 0);
 
+          // Some webgl processing steps.
+          // gl.bindFramebuffer(gl.READ_FRAMEBUFFER, gl.FRAMEBUFFER);
 
-          gl.bindTexture(gl.TEXTURE_2D, tex);
-          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 512, 512, 0, gl.RGB, gl.UNSIGNED_BYTE, d);
-          // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, webcamVideoEl);
-          // d = b.dataToGPU().texture;
-          gl.viewport(0, 0, metadata.width, metadata.height);
-          gl.useProgram(prog);
-          gl.uniform1i(texLoc, 0);
-          gl.uniform2f(texSizeLoc, metadata.width, metadata.height);
-          gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+          const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+
+          if (status != gl.FRAMEBUFFER_COMPLETE) {
+            throw new Error(`Bad framebuffer status:${status}`);
+          }
+
+          // Once all the processing is done, we can render the result on the canvas.
+          gl.blitFramebuffer(0, 0, metadata.height, metadata.width, 0, metadata.height, metadata.width, 0, gl.COLOR_BUFFER_BIT, gl.LINEAR);
+
+          // gl.bindTexture(gl.TEXTURE_2D, tex);
+          // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 512, 512, 0, gl.RGB, gl.UNSIGNED_BYTE, d);
+          // // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, webcamVideoEl);
+          // // d = b.dataToGPU().texture;
+          // gl.viewport(0, 0, metadata.width, metadata.height);
+          // gl.useProgram(prog);
+          // gl.uniform1i(texLoc, 0);
+          // gl.uniform2f(texSizeLoc, metadata.width, metadata.height);
+          // gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
           // webcamVideoEl.requestVideoFrameCallback(processFrame);
+          // requestAnimationFrame(processFrame);
         }
         webcamVideoEl.requestVideoFrameCallback(processFrame);
+        // processFrame();
       }).catch(error => {
         console.error(error);
       });
