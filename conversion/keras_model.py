@@ -7,15 +7,18 @@ import tensorflow as tf
 
 
 def convertAndSaveModels(model, model_name="model"):
-    # Save Keras model
-    model.save('%s.h5' % model_name)
+    # # Save Keras model
+    # model.save('%s.h5' % model_name)
+
     # Save TF model
     model.save(filepath='%s_tf' % model_name, save_format='tf')
+
     # Convert to and save TFLite model
     converter = tf.lite.TFLiteConverter.from_keras_model(model)
     tflite_model = converter.convert()
     with open('%s.tflite' % model_name, 'wb') as f:
         f.write(tflite_model)
+
 
 def inference(model, shape=[1, 224, 224, 3]):
     input_data = tf.ones(shape, dtype=tf.float32)
@@ -24,12 +27,12 @@ def inference(model, shape=[1, 224, 224, 3]):
 
 
 model = ResNet152(weights='imagenet')
-saveFreezeModel(model)
+convertAndSaveModels(model)
 
 model = ResNet50(weights='imagenet')
-saveModels(model, 'resnet50')
+convertAndSaveModels(model, 'resnet50')
 
 model = ResNet101(weights='imagenet')
-saveModels(model, 'resnet101')
+convertAndSaveModels(model, 'resnet101')
 
 
